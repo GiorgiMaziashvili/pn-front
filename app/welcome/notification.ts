@@ -1,4 +1,7 @@
 export const requestNotificationPermission = async () => {
+    if ("vibrate" in navigator) {
+        navigator.vibrate([200, 100, 200, 100, 200, 100, 200]); 
+    }
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
       console.warn("Permission denied");

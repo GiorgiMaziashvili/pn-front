@@ -12,18 +12,21 @@
 //     });
 //   });
 self.addEventListener('push', (event) => {
+  const vibration = [200, 100, 200, 100, 200, 100, 200];  
   const data = event.data.json();
   const title = data.title;
   const options = {
     body: data.body,
     icon: "/icon.png",
     badge: "/icon.png",
-    vibrate: [200, 100, 200, 100, 200, 100, 200],
     data: {
       url: data?.url
     }
   };
-
+  
+  if ("vibrate" in navigator) {
+    navigator.vibrate(vibration); 
+  }
   event.waitUntil(
     self.registration.showNotification(title, options)
   );
@@ -35,7 +38,6 @@ self.addEventListener('notificationclick', (event) => {
   const url = event.notification.data.url;
 
   event.waitUntil(
-    console.log(clients),
     clients.matchAll({ type: 'window' }).then((clientList) => {
       const client = clientList.find((client) => client.url === url && 'focus' in client);
 

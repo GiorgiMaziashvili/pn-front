@@ -7,6 +7,7 @@ import { requestNotificationPermission } from "./notification";
 export function Welcome() {
   useEffect(() => {
     registerServiceWorker();
+    
   }, []);
   
   return (
