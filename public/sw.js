@@ -35,8 +35,10 @@ self.addEventListener('notificationclick', (event) => {
   const url = event.notification.data.url;
 
   event.waitUntil(
+    console.log(clients),
     clients.matchAll({ type: 'window' }).then((clientList) => {
       const client = clientList.find((client) => client.url === url && 'focus' in client);
+
       if (client) {
         client.focus();
       } else {
