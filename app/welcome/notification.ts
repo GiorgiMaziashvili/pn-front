@@ -13,7 +13,13 @@ export const requestNotificationPermission = async () => {
   
     console.log("Push Subscription:", JSON.stringify(subscription));
   
-    await fetch("https://pn-back.onrender.com/subscribe", {
+    // await fetch("https://pn-back.onrender.com/subscribe", {
+    //   method: "POST",
+    //   body: JSON.stringify(subscription),
+    //   headers: { "Content-Type": "application/json" },
+    // });
+  
+    await fetch("http://localhost:4000/subscribe", {
       method: "POST",
       body: JSON.stringify(subscription),
       headers: { "Content-Type": "application/json" },
