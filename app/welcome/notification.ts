@@ -1,4 +1,4 @@
-// export const requestNotificationPermission = async () => {
+export const requestNotificationPermission = async () => {
 //     if ("vibrate" in navigator) {
 //         navigator.vibrate([200, 100, 200, 100, 200, 100, 200]); 
 //     }
@@ -26,49 +26,52 @@
 //       body: JSON.stringify(subscription),
 //       headers: { "Content-Type": "application/json" },
 //     });
-// };
+};
 
-
-export const requestNotificationPermission = () => {
-    if (!("Notification" in window)) {
-    // Check if the browser supports notifications
-    alert("This browser does not support desktop notification");
-  } else if (Notification.permission === "granted") {
-    // Check whether notification permissions have already been granted;
-    // if so, create a notification
-    const notification = new Notification("Hi there!");
-    alert('granted');
-    // …
-  } else if (Notification.permission !== "denied") {
-    // We need to ask the user for permission
-    Notification.requestPermission().then((permission) => {
-      // If the user accepts, let's create a notification
-      if (permission === "granted") {
-        const notification = new Notification("Hi there!");
-        // …
-      }
-    });
-  
-    // At last, if the user has denied notifications, and you
-    // want to be respectful there is no need to bother them anymore.
+export class PushSystemClass {
+  registerWorker = async () => {
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      await navigator.serviceWorker.register("/sw.js").then(async (register) => {
+        console.log("Service Worker registered:", register);
+       
+        this.requestPermission(register);
+      }).catch(err => {
+        console.error("Service Worker registration failed:", err);
+      });
+    }
   }
+
+  requestPermission = async (register:ServiceWorkerRegistration) =>{
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      await navigator.serviceWorker.ready;
+      console.log("Notification permission granted.");
+      this.subscribe(register);
+    } else {
+      console.warn("Notification permission denied.");
+    }
+  }
+
+  subscribe = async (register:ServiceWorkerRegistration) =>{
+    try {
+      
+      const subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: "BOLbW36jelHonTWQ-FEk4s8SydCSauck1y1HIQ6GhrWHEgrONIdDrI-KapqyltyePVlrGGDggSwaqutJBRol-lw" 
+      });
   
+      console.log("Push Subscription:", JSON.stringify(subscription));
+  
+      await fetch("https://pn-back.onrender.com/subscribe", {
+        method: "POST",
+        body: JSON.stringify(subscription),
+        headers: { "Content-Type": "application/json" },
+      });
+  
+    } catch (error) {
+      console.error("Push subscription failed:", error);
+    }
+  }
 }
 
-// export const requestNotificationPermission = async () => {
-//   alert(JSON.stringify(ServiceWorker))
-//   await Notification.requestPermission().then((perm) => {
-//       if(perm === 'granted') {
-//           const notification = new Notification('Turn on', {
-//               body: 'Turn on the service worker to get the best experience',
-//               icon: 'dsa'
-//           })
-
-//           notification.addEventListener('show',()=> {
-//             if ("vibrate" in navigator) {
-//               navigator.vibrate([200, 100, 200, 100, 200, 100, 200]); 
-//             }
-//           })
-//       }
-//   })
-// }
+export const pushSystem = new PushSystemClass();
