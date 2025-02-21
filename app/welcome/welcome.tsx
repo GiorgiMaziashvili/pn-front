@@ -3,6 +3,7 @@ import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import { registerServiceWorker } from "./web-worker";
 import { pushSystem, requestNotificationPermission } from "./notification";
+import InstallPWA from "~/components/detectPWA/detect-pwa";
 
 export function Welcome() {
   useEffect(() => {
@@ -28,6 +29,7 @@ export function Welcome() {
           </div>
         </header>
         <button className="bg-amber-200 text-slate-700 whitespace-nowrap p-2.5 rounded-md cursor-pointer" onClick={pushSystem.registerWorker}>Enable Notifications</button>
+        <InstallPWA />
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
