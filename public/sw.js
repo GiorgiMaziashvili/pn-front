@@ -11,6 +11,8 @@
 //       }
 //     });
 //   });
+
+
 self.addEventListener('push', (event) => {
   const vibration = [200, 100, 200, 100, 200, 100, 200];  
   const data = event.data.json();
@@ -19,11 +21,12 @@ self.addEventListener('push', (event) => {
     body: data.body,
     icon: "/icon.png",
     badge: "/icon.png",
+    silent: false,
     data: {
       url: data?.url
     }
   };
-  
+
   if ("vibrate" in navigator) {
     navigator.vibrate(vibration); 
   }

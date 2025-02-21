@@ -5,6 +5,7 @@ export const registerServiceWorker = async () => {
             console.log("Service Worker Registered:", registration);
         } catch (err) {
             console.error("Service Worker Registration Failed", err);
+            alert("error")
         }
     }
 };
